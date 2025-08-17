@@ -222,7 +222,6 @@ const refreshAccessToken = AsyncHandler(async (req, res) => {
     //     user.refreshToken,
     //     process.env.REFRESH_TOKEN_SECRET
     //   );
-    console.log('payload token: ', incomingToken)
     if (incomingToken !== user.refreshToken) throw new ApiError(402, "Invalid Refresh Token");
     const options = {
         secure: true,
