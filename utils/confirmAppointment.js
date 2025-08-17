@@ -5,6 +5,7 @@ import createMeetEvent from "./createMeetEvent.js";
 import ApiError from "./ApiError.js";
 import { sendMeetMail } from "./mailGenerator.js";
 const confirmAppointment = async (req, res) => {
+    console.log('webhook called')
     const sig = req.headers['stripe-signature'];
     const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
