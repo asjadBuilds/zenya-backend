@@ -19,6 +19,7 @@ app.use('/api/stripe/webhook', bodyParser.raw({ type: 'application/json' }), con
 app.use(cors({
   origin: `${process.env.CLIENT_URL}`,
   credentials: true,
+   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
