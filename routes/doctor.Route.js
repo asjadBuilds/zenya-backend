@@ -34,16 +34,6 @@ route.post('/getDoctorsByQuery',
 )
 
 route.post('/updateDoctorProfile',
-    [
-        query('fullname').optional().notEmpty().withMessage('Full name is required'),
-        query('email').optional().isEmail().withMessage('Valid email is required'),
-        query('phone').optional().notEmpty().withMessage('Phone number is required'),
-        query('country').optional().notEmpty().withMessage('Country is required'),
-        query('city').optional().notEmpty().withMessage('City is required'),
-        query('specialization').optional().notEmpty().withMessage('Specialization is required'),
-        query('bio').optional(),
-        query('categoryId').optional().notEmpty().withMessage('Category ID is required')
-    ],
     upload.single('avatar'),
     verifyJWT,
     updateDoctorProfile

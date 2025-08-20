@@ -5,6 +5,7 @@ import ApiResponse from '../utils/ApiResponse.js';
 import Doctor from '../models/doctorModel.js';
 import Category from '../models/categoryModel.js';
 import mongoose from 'mongoose';
+import { uploadFileonCloudinary } from '../utils/cloudinary.js';
 const getDoctorProfile = AsyncHandler(async (req, res) => {
     const { doctorId } = req.body;
     const result = validationResult(req);
@@ -52,8 +53,6 @@ const getDoctorsByQuery = AsyncHandler(async (req, res) => {
 
 const updateDoctorProfile = AsyncHandler(async (req, res) => {
     const { fullname, email, phone, country, city, specialization, bio, categoryId } = req.body;
-    const result = validationResult(req);
-    if (!result.isEmpty()) throw new ApiError(400, "Validation error");
     const avatarLocalPath = req.file?.path;
     const avatar = await uploadFileonCloudinary(avatarLocalPath);
     if (!avatar) throw new ApiError(400, "Avatar file is required");
