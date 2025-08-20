@@ -5,16 +5,18 @@ import Doctor from "../models/doctorModel.js";
 // Runs every 60 minutes
 
 const slotManager = () => {
-    nodeCron.schedule("*/60 * * * *", async () => {
+    nodeCron.schedule("0 0 * * *", async () => {
         console.log("Running slot auto-unbook job");
 
         const expiredAppointments = await Appointment.find({
             status: { $ne: "COMPLETED" },
             dateTime: { $lt: new Date() }
-        });
+        }).populate('doctorId');
 
         for (const appointment of expiredAppointments) {
-            const doctor = await Doctor.findById(appointment.doctor);
+            appointment.status = "COMPLETED";
+            await appointment.save();
+            const doctor = await Doctor.findById(appointment.doctorId);
             if (!doctor) continue;
 
             const slotIndex = doctor.availableSlots.findIndex(slot =>
