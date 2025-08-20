@@ -1,6 +1,6 @@
 import express from 'express';
 import { query } from 'express-validator';
-import { addEducation, addExperience, deleteEducation, deleteExperience, editEducation, editExperience, getCategories, getDoctorProfile, getDoctorsByCategory, getDoctorsByLocation, getDoctorsByQuery, updateDoctorProfile } from '../controllers/doctorControllers.js';
+import { addEducation, addExperience, deleteEducation, deleteExperience, editEducation, editExperience, getCategories, getDoctorEducation, getDoctorExperience, getDoctorProfile, getDoctorsByCategory, getDoctorsByLocation, getDoctorsByQuery, updateDoctorProfile } from '../controllers/doctorControllers.js';
 import { verifyJWT } from '../middlewares/auth.middleware.js';
 import upload from '../middlewares/multer.middleware.js';
 
@@ -61,6 +61,10 @@ route.post('/addEducation',verifyJWT,addEducation);
 
 route.post('/editEducation',verifyJWT,editEducation);
 
-route.post('/deleteEducation',verifyJWT,deleteEducation)
+route.post('/deleteEducation',verifyJWT,deleteEducation);
+
+route.get('/getDoctorEducation',verifyJWT,getDoctorEducation);
+
+route.get('/getDoctorExperience',verifyJWT,getDoctorExperience)
 
 export default route;

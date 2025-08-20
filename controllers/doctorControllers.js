@@ -94,7 +94,7 @@ const addEducation = AsyncHandler(async (req, res) => {
   } = req.body;
   // const result = validationResult(req.body);
   // if (!result) throw new ApiError(402, "Invalid details");
-  const userInfo = await Doctor.findOneAndUpdate(
+  await Doctor.findOneAndUpdate(
     { _id: req.user._id },
     {
       $push: {
@@ -112,7 +112,7 @@ const addEducation = AsyncHandler(async (req, res) => {
   res
     .status(200)
     .json(
-      new ApiResponse(200, userInfo, "User Education updated Successfully")
+      new ApiResponse(200, {}, "Doctor Education added Successfully")
     );
 });
 
@@ -126,8 +126,8 @@ const editEducation = AsyncHandler(async (req, res) => {
   } = req.body;
   const result = validationResult(req.body);
   if (!result) throw new ApiError(402, "Invalid details");
-  await UserInfo.findOneAndUpdate(
-    { user: req.user._id, "education._id": educationId },
+  await Doctor.findOneAndUpdate(
+    { _id: req.user._id, "education._id": educationId },
     {
       $set: {
         "education.$.instituteName": instituteName,
@@ -140,15 +140,15 @@ const editEducation = AsyncHandler(async (req, res) => {
   );
   res
     .status(200)
-    .json(new ApiResponse(200, "User Education updated Successfully"));
+    .json(new ApiResponse(200,{}, "Doctor Education updated Successfully"));
 });
 
 const deleteEducation = AsyncHandler(async (req, res) => {
   const { educationId } = req.body;
   const result = validationResult(req.body);
   if (!result) throw new ApiError(402, "Invalid details");
-  await UserInfo.findOneAndUpdate(
-    { user: req.user._id },
+  await Doctor.findOneAndUpdate(
+    { _id: req.user._id },
     {
       $pull: {
         education: {
@@ -161,7 +161,7 @@ const deleteEducation = AsyncHandler(async (req, res) => {
 
   res
     .status(200)
-    .json(new ApiResponse(200, "User Education deleted Successfully"));
+    .json(new ApiResponse(200,{}, "Doctor Education deleted Successfully"));
 });
 const addExperience = AsyncHandler(async (req, res) => {
   const {
@@ -172,7 +172,7 @@ const addExperience = AsyncHandler(async (req, res) => {
   } = req.body;
   // const result = validationResult(req.body);
   // if (!result) throw new ApiError(402, "Invalid details");
-  const userInfo = await Doctor.findOneAndUpdate(
+  await Doctor.findOneAndUpdate(
     { _id: req.user._id },
     {
       $push: {
@@ -190,13 +190,13 @@ const addExperience = AsyncHandler(async (req, res) => {
   res
     .status(200)
     .json(
-      new ApiResponse(200, userInfo, "User Experience updated Successfully")
+      new ApiResponse(200, {}, "Doctor Experience updated Successfully")
     );
 });
 
 const editExperience = AsyncHandler(async (req, res) => {
   const {
-    companyName,
+    instituteName,
     role,
     startDate,
     endDate,
@@ -204,11 +204,11 @@ const editExperience = AsyncHandler(async (req, res) => {
   } = req.body;
   const result = validationResult(req.body);
   if (!result) throw new ApiError(402, "Invalid details");
-  await UserInfo.findOneAndUpdate(
-    { user: req.user._id, "experience._id": experienceId },
+  await Doctor.findOneAndUpdate(
+    { _id: req.user._id, "experience._id": experienceId },
     {
       $set: {
-        "experience.$.companyName": companyName,
+        "experience.$.instituteName": instituteName,
         "experience.$.role": role,
         "experience.$.startDate": startDate,
         "experience.$.endDate": endDate,
@@ -218,15 +218,15 @@ const editExperience = AsyncHandler(async (req, res) => {
   );
   res
     .status(200)
-    .json(new ApiResponse(200, "User Education updated Successfully"));
+    .json(new ApiResponse(200,{}, "Doctor Education updated Successfully"));
 });
 
 const deleteExperience = AsyncHandler(async (req, res) => {
   const { experienceId } = req.body;
   const result = validationResult(req.body);
   if (!result) throw new ApiError(402, "Invalid details");
-  await UserInfo.findOneAndUpdate(
-    { user: req.user._id },
+  await Doctor.findOneAndUpdate(
+    { _id: req.user._id },
     {
       $pull: {
         experience: {
@@ -239,8 +239,21 @@ const deleteExperience = AsyncHandler(async (req, res) => {
 
   res
     .status(200)
-    .json(new ApiResponse(200, "User Experience deleted Successfully"));
+    .json(new ApiResponse(200,{}, "Doctor Experience deleted Successfully"));
 });
+
+const getDoctorEducation = AsyncHandler(async(req,res)=>{
+  const education = await Doctor.findById(req.user._id).select('education');
+  res
+  .status(200)
+  .json(new ApiResponse(200, education, "Doctor Education fetched successfully"))
+})
+const getDoctorExperience = AsyncHandler(async(req,res)=>{
+  const experience = await Doctor.findById(req.user._id).select('experience');
+  res
+  .status(200)
+  .json(new ApiResponse(200, experience, "Doctor Experience fetched successfully"))
+})
 
 export {
     getDoctorProfile,
@@ -254,5 +267,7 @@ export {
     deleteEducation,
     addExperience,
     editExperience,
-    deleteExperience
+    deleteExperience,
+    getDoctorEducation,
+    getDoctorExperience
 }
