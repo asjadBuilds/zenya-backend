@@ -72,10 +72,10 @@ const registerSocialUser = AsyncHandler(async (req, res) => {
 
     if (isDoctor) {
         const { accessToken, refreshToken } = await generateAccessAndRefreshToken(isDoctor._id, 'doctor')
-        const tokens = { accessToken, refreshToken }
+        const data = { accessToken, refreshToken, isVerified:isDoctor?.isVerified, role:'doctor' }
         return res
             .status(200)
-            .json(new ApiResponse(409,tokens, "Doctor Tokens Sended Successfully"));
+            .json(new ApiResponse(409,data, "Doctor Tokens Sended Successfully"));
     }
     const user = await User.findOne({ email });
     if (!user) {
@@ -84,15 +84,15 @@ const registerSocialUser = AsyncHandler(async (req, res) => {
             username,
             email,
             password,
-            avatar
+            avatar,     
         })
     }
 
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id, 'user')
-    const tokens = { accessToken, refreshToken }
+    const data = { accessToken, refreshToken, role:'user' }
     res
         .status(200)
-        .json(new ApiResponse(200, tokens, "User Registration Successfully Completed"))
+        .json(new ApiResponse(200, data, "User Registration Successfully Completed"))
 })
 
 const loginUser = AsyncHandler(async (req, res) => {
